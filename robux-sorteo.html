@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Sorteo comunitario de 500 Robux. Solo se solicita el usuario de Roblox; nunca una contraseña."
+    />
+    <title>Sorteo de 500 Robux | DropRobux</title>
+    <style>
+      :root {
+        --background: #0b0e1e;
+        --foreground: #e7edf6;
+        --muted: #8993a8;
+        --blue: #47bdff;
+        --blue-bright: #72ccff;
+        --yellow: #f6c14a;
+        --card: #111e36;
+        --card-inner: #132541;
+        --input: #0d1a30;
+        --green: #86efac;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-width: 320px;
+        margin: 0;
+        color: var(--foreground);
+        background: var(--background);
+        font-family: "Trebuchet MS", Arial, sans-serif;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .giveaway-page {
+        position: relative;
+        isolation: isolate;
+        min-height: 100vh;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 76% 17%, rgba(40, 172, 255, 0.14), transparent 29rem),
+          radial-gradient(circle at 15% 78%, rgba(246, 193, 74, 0.075), transparent 24rem),
+          var(--background);
+      }
+
+      .giveaway-page::before {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        content: "";
+        opacity: 0.28;
+        background-image: radial-gradient(rgba(181, 213, 255, 0.34) 0.7px, transparent 0.7px);
+        background-size: 21px 21px;
+        mask-image: linear-gradient(to bottom, black, transparent 86%);
+      }
+
+      .giveaway-page::after {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        pointer-events: none;
+        content: "";
+        opacity: 0.03;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        width: min(100%, 1280px);
+        min-height: 100vh;
+        margin: 0 auto;
+        padding: 0 48px;
+      }
+
+      .site-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 32px 0;
+        animation: reveal-up 0.7s ease-out both;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-mark,
+      .icon-tile {
+        display: grid;
+        place-items: center;
+      }
+
+      .brand-mark {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        color: var(--blue);
+        border: 1px solid rgba(71, 189, 255, 0.35);
+        border-radius: 12px;
+        background: rgba(71, 189, 255, 0.1);
+        box-shadow: 0 0 24px rgba(47, 184, 255, 0.12);
+      }
+
+      .brand-mark::after {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 8px;
+        height: 8px;
+        content: "";
+        border-radius: 50%;
+        background: var(--yellow);
+      }
+
+      .brand-text small,
+      .eyebrow,
+      .micro-label {
+        color: var(--muted);
+        font-family: "Courier New", monospace;
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      .brand-text small {
+        display: block;
+        letter-spacing: 0.2em;
+      }
+
+      .brand-text strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 18px;
+        letter-spacing: -0.04em;
+      }
+
+      .brand-text strong span {
+        color: var(--blue);
+      }
+
+      .safety-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 14px;
+        color: var(--muted);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s ease;
+      }
+
+      .safety-link:hover {
+        color: var(--foreground);
+        border-color: rgba(71, 189, 255, 0.4);
+      }
+
+      .main-content {
+        position: relative;
+        display: grid;
+        flex: 1;
+        align-items: center;
+        gap: 96px;
+        grid-template-columns: minmax(0, 1fr) minmax(400px, 464px);
+        padding: 64px 0 80px;
+      }
+
+      .hero-copy {
+        position: relative;
+        z-index: 1;
+        max-width: 680px;
+        animation: reveal-up 0.8s 0.08s ease-out both;
+      }
+
+      .active-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 28px;
+        padding: 7px 12px;
+        color: var(--yellow);
+        border: 1px solid rgba(246, 193, 74, 0.25);
+        border-radius: 999px;
+        background: rgba(246, 193, 74, 0.08);
+        font-family: "Courier New", monospace;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .active-pill::before {
+        width: 6px;
+        height: 6px;
+        content: "";
+        border-radius: 50%;
+        background: var(--yellow);
+        box-shadow: 0 0 10px rgba(246, 193, 74, 0.9);
+      }
+
+      h1 {
+        max-width: 760px;
+        margin: 0;
+        color: var(--foreground);
+        font-size: clamp(3.5rem, 9vw, 7.6rem);
+        font-weight: 900;
+        letter-spacing: -0.09em;
+        line-height: 0.86;
+      }
+
+      h1 .blue {
+        color: var(--blue);
+      }
+
+      h1 .dim {
+        color: rgba(231, 237, 246, 0.55);
+      }
+
+      .hero-copy > p {
+        max-width: 430px;
+        margin: 32px 0 0;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .benefits {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 28px;
+        margin-top: 36px;
+        color: rgba(137, 147, 168, 0.9);
+        font-size: 12px;
+      }
+
+      .benefit {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .benefit::before {
+        display: grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        content: "✓";
+        color: var(--blue);
+        border-radius: 50%;
+        background: rgba(71, 189, 255, 0.1);
+        font-size: 12px;
+      }
+
+      .entry-card {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        animation: reveal-up 0.8s 0.2s ease-out both;
+      }
+
+      .card-shell {
+        position: relative;
+        padding: 4px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 26px;
+        background: rgba(17, 30, 54, 0.95);
+        box-shadow: 0 24px 90px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(20px);
+      }
+
+      .card-shell::before {
+        position: absolute;
+        top: 0;
+        right: 32px;
+        left: 32px;
+        height: 1px;
+        content: "";
+        background: linear-gradient(90deg, transparent, var(--blue), transparent);
+      }
+
+      .card-inner {
+        padding: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 21px;
+        background: rgba(19, 37, 65, 0.8);
+      }
+
+      .card-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+
+      .eyebrow {
+        color: var(--blue);
+        letter-spacing: 0.22em;
+      }
+
+      h2 {
+        margin: 8px 0 0;
+        font-size: 28px;
+        letter-spacing: -0.05em;
+      }
+
+      .card-heading p {
+        max-width: 288px;
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .icon-tile {
+        flex: 0 0 auto;
+        width: 44px;
+        height: 44px;
+        color: #172038;
+        border-radius: 12px;
+        background: var(--yellow);
+        box-shadow: 4px 4px 0 rgba(246, 193, 74, 0.18);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .input-wrap {
+        position: relative;
+      }
+
+      .at {
+        position: absolute;
+        top: 50%;
+        left: 16px;
+        color: var(--muted);
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        transform: translateY(-50%);
+      }
+
+      input {
+        width: 100%;
+        padding: 14px 16px 14px 36px;
+        color: var(--foreground);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        outline: 0;
+        background: var(--input);
+        transition: 0.2s ease;
+      }
+
+      input::placeholder {
+        color: rgba(137, 147, 168, 0.6);
+      }
+
+      input:focus {
+        border-color: var(--blue);
+        background: rgba(35, 55, 86, 0.72);
+        box-shadow: 0 0 0 4px rgba(47, 184, 255, 0.12);
+      }
+
+      input[aria-invalid="true"] {
+        border-color: #fca5a5;
+      }
+
+      .hint {
+        min-height: 20px;
+        margin: 8px 0 0;
+        color: rgba(137, 147, 168, 0.7);
+        font-size: 12px;
+      }
+
+      .error {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #fecaca;
+        font-weight: 700;
+      }
+
+      .primary-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        margin-top: 16px;
+        padding: 14px 20px;
+        color: #0b0e1e;
+        border: 0;
+        border-radius: 12px;
+        background: var(--blue);
+        font-size: 14px;
+        font-weight: 900;
+        transition: 0.2s ease;
+      }
+
+      .primary-button:hover:not(:disabled) {
+        background: var(--blue-bright);
+        box-shadow: 0 12px 28px rgba(47, 184, 255, 0.24);
+        transform: translateY(-2px);
+      }
+
+      .primary-button:disabled {
+        cursor: not-allowed;
+        opacity: 0.65;
+      }
+
+      .safety-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 24px;
+        padding-top: 20px;
+        color: var(--muted);
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      .safety-note strong {
+        color: rgba(231, 237, 246, 0.8);
+      }
+
+      .security-caption {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 16px;
+        color: rgba(137, 147, 168, 0.55);
+        font-size: 11px;
+        text-align: center;
+      }
+
+      .success-panel {
+        padding: 20px;
+        border: 1px solid rgba(134, 239, 172, 0.25);
+        border-radius: 16px;
+        background: rgba(74, 222, 128, 0.08);
+        animation: reveal-up 0.45s ease-out both;
+      }
+
+      .success-main {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .success-check {
+        display: grid;
+        flex: 0 0 auto;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        color: #0d2822;
+        border-radius: 50%;
+        background: var(--green);
+        font-weight: 900;
+      }
+
+      .success-panel strong {
+        color: #dcfce7;
+      }
+
+      .success-panel p {
+        margin: 4px 0 0;
+        color: rgba(220, 252, 231, 0.7);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .success-panel .success-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(134, 239, 172, 0.15);
+      }
+
+      .success-footer p {
+        color: rgba(220, 252, 231, 0.55);
+        font-size: 12px;
+      }
+
+      .change-button {
+        padding: 4px 8px;
+        color: #dcfce7;
+        border: 0;
+        background: transparent;
+        font-size: 12px;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+
+      .artwork {
+        position: absolute;
+        top: -32px;
+        right: -64px;
+        width: 400px;
+        height: 400px;
+        pointer-events: none;
+      }
+
+      .orbit,
+      .orbit-inner {
+        position: absolute;
+        border-radius: 50%;
+      }
+
+      .orbit {
+        inset: 12px;
+        border: 1px dashed rgba(71, 189, 255, 0.2);
+        animation: spin 22s linear infinite;
+      }
+
+      .orbit-inner {
+        inset: 48px;
+        border: 1px solid rgba(71, 189, 255, 0.1);
+      }
+
+      .ticket {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 208px;
+        height: 208px;
+        padding: 20px;
+        border: 1px solid rgba(71, 189, 255, 0.3);
+        border-radius: 36px;
+        background: rgba(22, 43, 75, 0.9);
+        box-shadow: 18px 20px 0 rgba(8, 15, 35, 0.42), 0 0 70px rgba(47, 184, 255, 0.13);
+        transform: translate(-50%, -50%) rotate(6deg);
+        animation: float-ticket 5s ease-in-out infinite;
+      }
+
+      .ticket-top,
+      .ticket-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .ticket-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--yellow);
+        box-shadow: 0 0 14px rgba(246, 193, 74, 0.55);
+      }
+
+      .ticket-code,
+      .ticket-bottom span {
+        color: rgba(71, 189, 255, 0.7);
+        font-family: "Courier New", monospace;
+        font-size: 9px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .ticket-value {
+        margin-top: 24px;
+        color: var(--blue);
+        font-size: 75px;
+        font-weight: 900;
+        letter-spacing: -0.12em;
+        line-height: 1;
+      }
+
+      .ticket-bottom {
+        margin-top: 36px;
+        padding-top: 12px;
+        border-top: 1px dashed rgba(71, 189, 255, 0.2);
+      }
+
+      .ticket-bottom span {
+        color: var(--muted);
+        font-size: 8px;
+      }
+
+      .ticket-spark {
+        color: var(--yellow);
+        font-size: 18px;
+      }
+
+      .info-strip {
+        display: grid;
+        gap: 0;
+        padding: 28px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 24px;
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .info-item:first-child {
+        padding-left: 0;
+      }
+
+      .info-item:last-child {
+        justify-content: flex-end;
+        padding-right: 0;
+        border-right: 0;
+      }
+
+      .info-icon {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        color: var(--blue);
+        border-radius: 9px;
+        background: rgba(71, 189, 255, 0.1);
+      }
+
+      .info-item:nth-child(2) .info-icon {
+        color: var(--yellow);
+        background: rgba(246, 193, 74, 0.1);
+      }
+
+      .info-item:nth-child(3) .info-icon {
+        color: var(--green);
+        background: rgba(134, 239, 172, 0.1);
+      }
+
+      .info-item p {
+        margin: 0;
+      }
+
+      .info-item .micro-label {
+        color: var(--muted);
+        letter-spacing: 0.14em;
+      }
+
+      .info-item strong {
+        display: block;
+        margin-top: 2px;
+        font-size: 14px;
+      }
+
+      footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 20px 0;
+        color: rgba(137, 147, 168, 0.45);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 11px;
+      }
+
+      footer p {
+        margin: 0;
+      }
+
+      .focus-ring:focus-visible,
+      button:focus-visible,
+      a:focus-visible {
+        outline: 3px solid var(--blue);
+        outline-offset: 4px;
+      }
+
+      @keyframes reveal-up {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float-ticket {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) rotate(6deg) translateY(0);
+        }
+        50% {
+          transform: translate(-50%, -50%) rotate(3deg) translateY(-10px);
+        }
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (max-width: 900px) {
+        .container {
+          padding: 0 32px;
+        }
+
+        .main-content {
+          grid-template-columns: 1fr;
+          gap: 48px;
+          padding: 48px 0 64px;
+        }
+
+        .hero-copy {
+          max-width: 720px;
+        }
+
+        .entry-card {
+          max-width: 520px;
+        }
+
+        .artwork {
+          display: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          padding: 0 20px;
+        }
+
+        .site-header {
+          padding: 24px 0;
+        }
+
+        .safety-link {
+          display: none;
+        }
+
+        .main-content {
+          gap: 36px;
+          padding: 40px 0 48px;
+        }
+
+        h1 {
+          font-size: clamp(3.2rem, 17vw, 5.5rem);
+        }
+
+        .hero-copy > p {
+          margin-top: 24px;
+          font-size: 16px;
+        }
+
+        .card-inner {
+          padding: 24px;
+        }
+
+        .info-strip {
+          gap: 18px;
+          grid-template-columns: 1fr;
+        }
+
+        .info-item,
+        .info-item:first-child,
+        .info-item:last-child {
+          justify-content: flex-start;
+          padding: 0;
+          border-right: 0;
+        }
+
+        footer {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="giveaway-page">
+      <div class="container">
+        <header class="site-header">
+          <div class="brand" aria-label="DropRobux comunidad">
+            <div class="brand-mark" aria-hidden="true">▱</div>
+            <div class="brand-text">
+              <small>comunidad</small>
+              <strong>Drop<span>Robux</span></strong>
+            </div>
+          </div>
+
+          <a class="safety-link" href="#seguridad">
+            <span aria-hidden="true">◉</span>
+            Hecho con seguridad
+          </a>
+        </header>
+
+        <section class="main-content">
+          <div class="artwork" aria-hidden="true">
+            <div class="orbit"></div>
+            <div class="orbit-inner"></div>
+            <div class="ticket">
+              <div class="ticket-top">
+                <span class="ticket-dot"></span>
+                <span class="ticket-code">DR / 500</span>
+              </div>
+              <div class="ticket-value">R$</div>
+              <div class="ticket-bottom">
+                <span>tu próximo drop</span>
+                <span class="ticket-spark">✦</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-copy">
+            <div class="active-pill">sorteo activo</div>
+            <h1>
+              500 <span class="blue">Robux</span><br />
+              <span class="dim">pueden ser</span><br />
+              tuyos.
+            </h1>
+            <p>
+              Una entrada. Cero vueltas. Deja tu usuario y cruza los dedos:
+              el próximo drop puede caer en tu cuenta.
+            </p>
+            <div class="benefits">
+              <span class="benefit">Gratis para entrar</span>
+              <span class="benefit">Sin contraseña</span>
+            </div>
+          </div>
+
+          <section class="entry-card" id="participa" aria-labelledby="entry-title">
+            <div class="card-shell">
+              <div class="card-inner">
+                <div class="card-heading">
+                  <div>
+                    <div class="eyebrow">entrada gratuita</div>
+                    <h2 id="entry-title">Pon tu usuario</h2>
+                    <p>Solo necesitamos esto para saber a quién avisar.</p>
+                  </div>
+                  <div class="icon-tile" aria-hidden="true">♙</div>
+                </div>
+
+                <div id="form-view">
+                  <form id="giveaway-form" novalidate>
+                    <label for="roblox-username">Usuario de Roblox</label>
+                    <div class="input-wrap">
+                      <span class="at" aria-hidden="true">@</span>
+                      <input
+                        id="roblox-username"
+                        name="username"
+                        type="text"
+                        placeholder="Tu usuario de Roblox"
+                        autocomplete="off"
+                        spellcheck="false"
+                        maxlength="20"
+                        aria-describedby="username-hint"
+                      />
+                    </div>
+                    <p class="hint" id="username-hint">Sin contraseña. Nunca la pedimos.</p>
+                    <button class="primary-button" id="submit-button" type="submit">
+                      <span id="button-label">Participar por 500 Robux</span>
+                      <span aria-hidden="true">→</span>
+                    </button>
+                  </form>
+                </div>
+
+                <div id="success-view" hidden>
+                  <div class="success-panel" role="status" aria-live="polite">
+                    <div class="success-main">
+                      <div class="success-check" aria-hidden="true">✓</div>
+                      <div>
+                        <strong>¡Listo, ya estás dentro!</strong>
+                        <p>
+                          Registramos <strong id="submitted-username"></strong>
+                          para el sorteo.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="success-footer">
+                      <p>El ganador se anuncia en el grupo.</p>
+                      <button class="change-button" id="change-button" type="button">
+                        Cambiar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="safety-note">
+                  <span aria-hidden="true">▣</span>
+                  <span>
+                    No pedimos <strong>contraseña</strong> ni datos sensibles.
+                    Si ganas, te avisamos a través del grupo.
+                  </span>
+                </div>
+              </div>
+            </div>
+            <p class="security-caption">
+              <span aria-hidden="true">◉</span>
+              Sorteo comunitario, sin acceso a tu cuenta
+            </p>
+          </section>
+        </section>
+
+        <section class="info-strip" id="seguridad" aria-label="Información de seguridad">
+          <div class="info-item">
+            <div class="info-icon" aria-hidden="true">▱</div>
+            <div>
+              <div class="micro-label">premio</div>
+              <strong>500 Robux</strong>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon" aria-hidden="true">?</div>
+            <div>
+              <div class="micro-label">aviso</div>
+              <strong>Por el grupo oficial del sorteo</strong>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon" aria-hidden="true">✓</div>
+            <div>
+              <div class="micro-label">tranquilo</div>
+              <strong>Nunca pedimos tu contraseña</strong>
+            </div>
+          </div>
+        </section>
+
+        <footer>
+          <p>DropRobux es una iniciativa de la comunidad.</p>
+          <p>× &nbsp;No es un sitio oficial de Roblox.</p>
+        </footer>
+      </div>
+    </main>
+
+    <script>
+      const form = document.getElementById("giveaway-form");
+      const usernameInput = document.getElementById("roblox-username");
+      const hint = document.getElementById("username-hint");
+      const submitButton = document.getElementById("submit-button");
+      const buttonLabel = document.getElementById("button-label");
+      const formView = document.getElementById("form-view");
+      const successView = document.getElementById("success-view");
+      const submittedUsername = document.getElementById("submitted-username");
+      const changeButton = document.getElementById("change-button");
+
+      function showError(message) {
+        usernameInput.setAttribute("aria-invalid", "true");
+        hint.className = "hint error";
+        hint.textContent = message;
+      }
+
+      function clearError() {
+        usernameInput.removeAttribute("aria-invalid");
+        hint.className = "hint";
+        hint.textContent = "Sin contraseña. Nunca la pedimos.";
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const username = usernameInput.value.trim();
+
+        if (!username) {
+          showError("Escribe tu usuario para participar.");
+          usernameInput.focus();
+          return;
+        }
+
+        if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
+          showError("Usa entre 3 y 20 caracteres: letras, números o guion bajo.");
+          usernameInput.focus();
+          return;
+        }
+
+        clearError();
+        submitButton.disabled = true;
+        buttonLabel.textContent = "Guardando tu entrada…";
+
+        window.setTimeout(function () {
+          submittedUsername.textContent = "@" + username;
+          formView.hidden = true;
+          successView.hidden = false;
+          submitButton.disabled = false;
+          buttonLabel.textContent = "Participar por 500 Robux";
+        }, 850);
+      });
+
+      usernameInput.addEventListener("input", clearError);
+
+      changeButton.addEventListener("click", function () {
+        form.reset();
+        clearError();
+        formView.hidden = false;
+        successView.hidden = true;
+        usernameInput.focus();
+      });
+    </script>
+  </body>
+</html>
